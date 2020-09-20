@@ -1,0 +1,61 @@
+{
+  "name": "gatsby-remark-strava",
+  "version": "1.0.0",
+  "description": "Gatsby remark plugin to embed Strava activities and profile by their URL",
+  "repository": "https://github.com/cedricdelpoux/gatsby-remark-strava",
+  "author": {
+    "name": "Cédric Delpoux",
+    "email": "cedric.delpoux@gmail.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "gatsby-transformer-plugin",
+    "gatsby-remark",
+    "gatsby-remark-plugin",
+    "strava"
+  ],
+  "main": "index.js",
+  "files": [
+    "utils"
+  ],
+  "dependencies": {
+    "express": "^4.17.1",
+    "glob": "^7.1.6",
+    "inquirer": "^7.3.3",
+    "open": "^7.2.1",
+    "strava-v3": "^2.0.6",
+    "unist-util-visit": "^2.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^7.7.0",
+    "eslint-config-prettier": "^6.10.0",
+    "husky": "^4.2.1",
+    "lint-staged": "^10.0.7",
+    "prettier": "2.0.5"
+  },
+  "peerDependencies": {
+    "gatsby": "^2.0.0"
+  },
+  "scripts": {
+    "lint": "eslint index.js utils example",
+    "prepublishOnly": "yarn lint"
+  },
+  "bin": {
+    "gatsby-remark-strava-token": "./utils/generate-token.js"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint"
+    ],
+    "*.{css,js,md}": [
+      "prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
+}
