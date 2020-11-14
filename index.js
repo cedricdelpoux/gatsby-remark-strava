@@ -46,24 +46,35 @@ module.exports = async ({markdownAST, cache, reporter}, pluginOptions) => {
 
     await Promise.all(
       stravaElements.map(async (node) => {
-        let html = await cache.get(node.url)
+        try {
+          let html = await cache.get(node.url)
 
-        if (!html) {
-          const activityId = getActivityFromUrl(node.url)
-          const activity = await strava.getActivity(activityId)
-          const {embed_token: embedToken} = activity
+          if (!html) {
+            const activityId = getActivityFromUrl(node.url)
+            const activity = await strava.getActivity(activityId)
+            const {embed_token: embedToken} = activity
 
-          html = getEmbedCode({activityId, embedToken})
-          await cache.set(node.url, html)
+            html = getEmbedCode({activityId, embedToken})
+
+            await cache.set(node.url, html)
+          }
+
+          node.type = `html`
+          node.value = html
+          node.children = undefined
+
+          if (pluginOptions.debug) {
+            reporter.success(`remark-strava: EMBED OK ${node.url}`)
+          }
+        } catch (e) {
+          if (pluginOptions.debug) {
+            reporter.warn(`remark-strava: EMBED NOK ${node.url}`)
+          }
         }
-
-        node.type = `html`
-        node.value = html
-        node.children = undefined
       })
     )
   } catch (e) {
-    reporter.panic(`remark-strava: ${e.message}`)
+    reporter.warn(`remark-strava: ${e.message}`)
   }
 
   return markdownAST
