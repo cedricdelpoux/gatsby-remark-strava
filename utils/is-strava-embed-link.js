@@ -8,7 +8,7 @@ exports.isStravaEmbedLink = (node) => {
     host.includes("strava.com") && pathname.includes("/activities/")
   const isLink = node.type === "link"
   const isEmbedLink =
-    node.children.length === 1 && node.children[0].value === "embed"
+    node.children.length === 1 && node.children[0].value.includes("embed")
 
   return isLink && isEmbedLink && isStravaActivityLink
 }

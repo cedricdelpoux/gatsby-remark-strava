@@ -59,10 +59,10 @@ module.exports = {
 4. Add [Strava](https://www.strava.com/) activities links to your content
 
 ```md
-[embed](https://www.strava.com/activities/3657585594)
+[strava activity 3657585594 embed](https://www.strava.com/activities/3657585594)
 ```
 
-> Only links with text "embed" will be transformed
+> Text need to contains "embed" to be transformed
 
 ## Showcase
 
