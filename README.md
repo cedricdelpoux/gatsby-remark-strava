@@ -40,16 +40,20 @@ require("dotenv").config()
 
 module.exports = {
     plugins: [
-        "gatsby-remark-strava",
         {
             resolve: "gatsby-transformer-remark",
             options: {
-                plugins: ["gatsby-remark-strava"],
-                options: {
-                    stravaClientId: process.env.STRAVA_CLIENT_ID,
-                    stravaClientSecret: process.env.STRAVA_CLIENT_SECRET,
-                    stravaToken: process.env.STRAVA_TOKEN,
-                },
+                plugins: [
+                    {
+                        resolve: "gatsby-remark-strava",
+                        options: {
+                            stravaClientId: process.env.STRAVA_CLIENT_ID,
+                            stravaClientSecret:
+                                process.env.STRAVA_CLIENT_SECRET,
+                            stravaToken: process.env.STRAVA_TOKEN,
+                        },
+                    },
+                ],
             },
         },
     ],
