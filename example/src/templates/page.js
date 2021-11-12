@@ -1,9 +1,11 @@
-import React from "react"
 import {graphql} from "gatsby"
+import React from "react"
 
-export default ({data: {page}}) => {
+const PageIndex = ({data: {page}}) => {
   return <div dangerouslySetInnerHTML={{__html: page.html}} />
 }
+
+export default PageIndex
 
 export const pageQuery = graphql`
   query Page($path: String!) {

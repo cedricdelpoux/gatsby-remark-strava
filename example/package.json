@@ -10,15 +10,14 @@
     "token": "../utils/generate-token.js"
   },
   "dependencies": {
-    "dotenv": "^8.2.0",
-    "gatsby": "^2.24.61",
-    "gatsby-source-filesystem": "^2.3.30",
-    "gatsby-transformer-remark": "^2.8.35",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "gatsby": "^4.1.4",
+    "gatsby-source-filesystem": "^4.1.2",
+    "gatsby-transformer-remark": "^5.1.3",
+    "react": "link:../node_modules/react",
+    "react-dom": "link:../node_modules/react-dom"
   },
   "devDependencies": {
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-react": "^7.20.6"
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-react": "^7.27.0"
   }
 }
