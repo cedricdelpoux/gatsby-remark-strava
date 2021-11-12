@@ -1,6 +1,6 @@
 {
   "name": "gatsby-remark-strava",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Gatsby remark plugin to embed Strava activities and profile by their URL",
   "repository": "https://github.com/cedricdelpoux/gatsby-remark-strava",
   "author": {
@@ -39,7 +39,7 @@
     "react-dom": "^17.0.2"
   },
   "peerDependencies": {
-    "gatsby": "^2.0.0"
+    "gatsby": "^3.0.0 || ^4.0.0"
   },
   "scripts": {
     "lint": "eslint index.js utils example",
