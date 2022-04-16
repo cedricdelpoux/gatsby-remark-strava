@@ -54,7 +54,11 @@ module.exports = async ({markdownAST, cache, reporter}, pluginOptions) => {
             const activity = await strava.getActivity(activityId)
             const {embed_token: embedToken} = activity
 
-            html = getEmbedCode({activityId, embedToken})
+            if (pluginOptions.render) {
+              html = pluginOptions.render(activity)
+            } else {
+              html = getEmbedCode({activityId, embedToken})
+            }
 
             await cache.set(node.url, html)
           }

@@ -33,7 +33,7 @@ Open a terminal at the root of your project and type:
 gatsby-remark-strava-token
 ```
 
-3. Add the plugin in your `gatsby-config.js` file. It's important that it is a child plugin of `gatsby-transformer-remark` as below, otherwise it won't work. 
+3. Add the plugin in your `gatsby-config.js` file. It's important that it is a child plugin of `gatsby-transformer-remark` as below, otherwise it won't work.
 
 ```js
 require("dotenv").config()
@@ -51,6 +51,8 @@ module.exports = {
                             stravaClientSecret:
                                 process.env.STRAVA_CLIENT_SECRET,
                             stravaToken: process.env.STRAVA_TOKEN,
+                            // OPTIONAL
+                            render: (activity) => `<div>${activity.name}</div>`,
                         },
                     },
                 ],
