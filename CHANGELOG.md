@@ -1,3 +1,8 @@
+# 1.5.0
+
+-   Added: **Gatsby v5** compatibility
+-   Fixed: Embed not rendering under Gatsby v5 / `gatsby-plugin-mdx` (`mdast-util-to-hast` checks `"children" in node`, so a key merely set to `undefined` still crashed)
+
 # 1.3.0
 
 -   Added: **Gatsby v4** compatibility
