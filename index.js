@@ -71,9 +71,9 @@ module.exports = async ({markdownAST, cache, reporter}, pluginOptions) => {
             reporter.success(`remark-strava: EMBED OK ${node.url}`)
           }
         } catch (e) {
-          if (pluginOptions.debug) {
-            reporter.warn(`remark-strava: EMBED NOK ${node.url}`)
-          }
+          // Not cached, so the next build tries again. The link stays a link
+          // meanwhile.
+          reporter.warn(`remark-strava: EMBED NOK ${node.url}: ${e.message}`)
         }
       })
     )
