@@ -1,3 +1,7 @@
+# 1.5.1
+
+-   Fixed: Build crashing with an unhandled `AggregateError` on machines without cache: the Strava token is now refreshed once for all documents, at most 4 requests run at once, and network errors only skip the embed with a warning
+
 # 1.5.0
 
 -   Added: **Gatsby v5** compatibility
