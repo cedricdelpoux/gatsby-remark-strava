@@ -15,7 +15,7 @@ module.exports = {
         plugins: [
           {
             //resolve: "gatsby-remark-strava"
-            resolve: require.resolve(`..`),
+            resolve: require.resolve(`../..`),
             options: {
               debug: true,
               stravaClientId: process.env.STRAVA_CLIENT_ID,

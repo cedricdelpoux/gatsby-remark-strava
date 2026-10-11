@@ -5,6 +5,41 @@ const {strava} = require("./utils/strava.js")
 const {getEmbedCode} = require("./utils/get-embed-code.js")
 const {getActivityFromUrl} = require("./utils/get-activity-from-url.js")
 
+const OUTPUTS = ["html", "mdx"]
+
+// Markdown treats 4+ leading spaces of indentation as an indented code block,
+// which swallows multi-line JSX (typically `render()` output indented by a
+// template literal) instead of parsing it as an element. Dedent before parsing.
+const dedent = (markup) => markup.replace(/^[ \t]+/gm, "").trim()
+
+// These packages are ESM only, and only needed for the "mdx" output
+const parseAsJsxNode = async (markup) => {
+  const {fromMarkdown} = await import("mdast-util-from-markdown")
+  const {mdxJsx} = await import("micromark-extension-mdx-jsx")
+  const {mdxJsxFromMarkdown} = await import("mdast-util-mdx-jsx")
+
+  const tree = fromMarkdown(dedent(markup), {
+    extensions: [mdxJsx()],
+    mdastExtensions: [mdxJsxFromMarkdown()],
+  })
+  const [jsxNode] = tree.children
+
+  if (!jsxNode || jsxNode.type !== "mdxJsxFlowElement") {
+    throw new Error("The markup is not a single JSX element")
+  }
+
+  // Its position points into the markup, not into the document
+  delete jsxNode.position
+
+  return jsxNode
+}
+
+// Replaces the node in place, so that its parent keeps pointing to it
+const replaceNode = (node, newNode) => {
+  Object.keys(node).forEach((key) => delete node[key])
+  Object.assign(node, newNode)
+}
+
 module.exports = async ({markdownAST, cache, reporter}, pluginOptions) => {
   if (!pluginOptions.stravaClientId) {
     reporter.warn("remark-strava: Missing `stravaClientId` option")
@@ -18,6 +53,17 @@ module.exports = async ({markdownAST, cache, reporter}, pluginOptions) => {
 
   if (!pluginOptions.stravaToken) {
     reporter.warn("remark-strava: Missing `stravaToken` option")
+    return
+  }
+
+  const output = pluginOptions.output || "html"
+
+  if (!OUTPUTS.includes(output)) {
+    reporter.warn(
+      `remark-strava: Invalid \`output\` option "${output}", expected one of: ${OUTPUTS.join(
+        ", "
+      )}`
+    )
     return
   }
 
@@ -41,39 +87,56 @@ module.exports = async ({markdownAST, cache, reporter}, pluginOptions) => {
         return
       }
 
-      stravaElements.push(node)
+      stravaElements.push({paragraphNode, node})
     })
 
     await Promise.all(
-      stravaElements.map(async (node) => {
-        try {
-          let html = await cache.get(node.url)
+      stravaElements.map(async ({paragraphNode, node}) => {
+        const {url} = node
+        // The markup differs between outputs, so they must not share a cache
+        // entry. The "html" one keeps the key used before this option.
+        const cacheKey = output === "html" ? url : `${output}:${url}`
 
-          if (!html) {
-            const activityId = getActivityFromUrl(node.url)
+        try {
+          let markup = await cache.get(cacheKey)
+
+          if (!markup) {
+            const activityId = getActivityFromUrl(url)
             const activity = await strava.getActivity(activityId)
             const {embed_token: embedToken} = activity
 
             if (pluginOptions.render) {
-              html = pluginOptions.render(activity)
+              markup = pluginOptions.render(activity)
             } else {
-              html = getEmbedCode({activityId, embedToken})
+              markup = getEmbedCode({
+                activityId,
+                embedToken,
+                jsx: output === "mdx",
+              })
             }
-
-            await cache.set(node.url, html)
           }
 
-          node.type = `html`
-          node.value = html
-          delete node.children
+          if (output === "mdx") {
+            // The JSX element replaces the whole paragraph, because a <div>
+            // returned by `render()` cannot sit inside a <p>
+            replaceNode(paragraphNode, await parseAsJsxNode(markup))
+          } else {
+            node.type = `html`
+            node.value = markup
+            delete node.children
+          }
+
+          // Only once the markup is known to work, so that a broken one is
+          // fetched again on the next build
+          await cache.set(cacheKey, markup)
 
           if (pluginOptions.debug) {
-            reporter.success(`remark-strava: EMBED OK ${node.url}`)
+            reporter.success(`remark-strava: EMBED OK ${url}`)
           }
         } catch (e) {
           // Not cached, so the next build tries again. The link stays a link
           // meanwhile.
-          reporter.warn(`remark-strava: EMBED NOK ${node.url}: ${e.message}`)
+          reporter.warn(`remark-strava: EMBED NOK ${url}: ${e.message}`)
         }
       })
     )

@@ -1,19 +1,19 @@
 {
-  "name": "gatsby-remark-strava-example",
+  "name": "gatsby-remark-strava-example-remark",
   "private": true,
   "scripts": {
     "dev": "gatsby develop",
     "start": "gatsby develop",
     "build": "gatsby build",
     "clean": "gatsby clean",
-    "token": "../utils/generate-token.js"
+    "token": "../../utils/generate-token.js"
   },
   "dependencies": {
     "gatsby": "^5.13.5",
     "gatsby-source-filesystem": "^5.13.1",
     "gatsby-transformer-remark": "^6.13.1",
-    "react": "link:../node_modules/react",
-    "react-dom": "link:../node_modules/react-dom"
+    "react": "link:../../node_modules/react",
+    "react-dom": "link:../../node_modules/react-dom"
   },
   "devDependencies": {
     "eslint-config-prettier": "^8.5.0",

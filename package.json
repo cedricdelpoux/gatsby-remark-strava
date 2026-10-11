@@ -25,6 +25,9 @@
     "express": "^4.17.3",
     "glob": "^8.0.1",
     "inquirer": "^8.2.2",
+    "mdast-util-from-markdown": "^2",
+    "mdast-util-mdx-jsx": "^3",
+    "micromark-extension-mdx-jsx": "^2",
     "open": "^8.4.0",
     "strava-v3": "^2.1.0",
     "unist-util-visit": "^2.0.3"
@@ -42,7 +45,7 @@
     "gatsby": "^3.0.0 || ^4.0.0 || ^5.0.0"
   },
   "scripts": {
-    "lint": "eslint index.js utils example",
+    "lint": "eslint index.js utils examples",
     "prepublishOnly": "yarn lint"
   },
   "bin": {
