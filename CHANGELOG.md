@@ -1,3 +1,7 @@
+# 1.6.0
+
+-   Added: `output` option, set it to `"mdx"` to emit embeds as JSX elements for `gatsby-plugin-mdx` (MDX v2+). The default `"html"` output is unchanged
+
 # 1.5.1
 
 -   Fixed: Build crashing with an unhandled `AggregateError` on machines without cache: the Strava token is now refreshed once for all documents, at most 4 requests run at once, and network errors only skip the embed with a warning

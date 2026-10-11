@@ -1,6 +1,6 @@
 {
   "name": "gatsby-remark-strava",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Gatsby remark plugin to embed Strava activities and profile by their URL",
   "repository": "https://github.com/cedricdelpoux/gatsby-remark-strava",
   "author": {
